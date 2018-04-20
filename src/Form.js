@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 /*
-Goal: The main goal here was to produce a 
+Goal: The main goal here was to produce a form with 
+non-obtrusive, yet effective, validation UI. Given there was no brand to take into account we kept the color scheme at a clean red, balck, and white.
 
 Assumptions:
 Form does not need to store data after vailidation
@@ -115,10 +116,11 @@ class reactForm extends Component {
        //return if invalid and viewed
        return !valid && viewed;
    }
-    
+     /* if not submitted display form if submitted show submission summary*/
     return (
-        /* declare form wraper*/
+       
       <div id="formbody">
+
        { !this.state.submited?(
         <div>
         <h1>The Bacon Effect</h1>
@@ -174,7 +176,8 @@ class reactForm extends Component {
 
         </form>
       </div>
-):( <div>
+):( 
+    <div>
    <h1> Thank you for your submisssion </h1>
     <h2 >Actor or Actress Name:</h2>
      <h2 className="submitted"> {this.state.person}</h2>
