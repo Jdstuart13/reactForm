@@ -2,7 +2,7 @@
   "name": "ReactForm",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jdstuart13.github.io/ReactForm",
+  "homepage": "https://jdstuart13.github.io/reactForm",
   "dependencies": {
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
+/*
+Goal: The main goal here was to produce a 
+
+Assumptions:
+Form does not need to store data after vailidation
 
 
-class smrtForm extends Component {
+*/
+
+class reactForm extends Component {
     /* We use a controlled form component which stores the form state in the react.js component, as none of these fields are read only (i.e no files) we do not have to use uncontrolled componets which needs the state to be left to the form*/
     
   constructor(props){
@@ -11,17 +18,21 @@ class smrtForm extends Component {
           person: "",
           oscars:"",
           degrees: "",
+          submited: false,
           viewed: {
-              //store error state
+              //store if object has been visited, makes error messages not appear until user has interacted with the field
               person: false,
               oscars: false,
               degrees: false,
           },
     
       };
- 
+     //bind event handlers
       this.handleChange = this.handleChange.bind(this);
       this.handleFocus = this.handleFocus.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.newForm = this.newForm.bind(this);
+
       }
     handleChange(event) {
         
@@ -37,25 +48,48 @@ class smrtForm extends Component {
         
   }
     handleFocus(event){
+        /*let the state know if an object has been visited to provide user with a polite reminder on input parameters*/
         const name=event.target.name;
+       //get old list state
         var viewed = this.state.viewed;
+        //update
         viewed[name]=true
         this.setState({
             viewed:viewed
         })
     }
-    handleSubmitHover(event){
-        console.log("ding");
-        var viewed=this.state.viewed.map(viewed=true)
+    handleSubmit(event){
+        //send to backend and database would go here!
+        this.setState(
+        {submited:true}
+        );
+        
+    }
+    newForm(event){
         this.setState({
-            viewed:viewed
-        })
+        //store form values in real time!
+          person: "",
+          oscars:"",
+          degrees: "",
+          submited: false,
+          viewed: {
+              //store if object has been visited, makes error messages not appear until user has interacted with the field
+              person: false,
+              oscars: false,
+              degrees: false,
+          },
+        });
     }
 
   validate(person, oscars,degrees){
+      /* all fields require input*/
       return{
+          /*numbers and special characters allowed for names 
+          for pysdonyms and the 3rds etc.*/
           person: (person.length > 0  ),
+          /*eliminates negatives and-non numbers*/
           oscars: (oscars.length > 0 && oscars>=0),
+          /*submission must be between 1-6, everyone is within 6 degrees of each other*/
           degrees:(degrees.length > 0 && degrees>=0 &&degrees<=6)
       };
   }
@@ -63,24 +97,30 @@ class smrtForm extends Component {
       
   
   render() {
+      
     const { person, oscars, degrees } = this.state;
     const errors = this.validate(person,oscars,degrees);
     
     
-   const isEnabled =
-       errors.person && errors.oscars &&errors.degrees;
+   const isEnabled = 
+         //looping could be used for larger forms
+       errors.person && errors.oscars && errors.degrees;
       //Determines if error should be display
+      
    const errorMark =(field)=>{
-       //
+       //gets if the selected field is marked valid
        const valid= errors[field];
+       //gets if the field has been visited, else it would mark error on load
        const viewed=this.state.viewed[field];
+       //return if invalid and viewed
        return !valid && viewed;
    }
     
     return (
-        
+        /* declare form wraper*/
       <div id="formbody">
-        
+       { !this.state.submited?(
+        <div>
         <h1>The Bacon Effect</h1>
         <p> They say everyone is within 6 connections, or degrees, of Kevin Bacon </p>
         <form>
@@ -90,7 +130,6 @@ class smrtForm extends Component {
             name="person" 
             type="text" 
             value={this.state.person}
-            //className={errorMark('person')? "error":''}
             onFocus={this.handleFocus}
             onChange={this.handleChange}/>
         </label>
@@ -102,20 +141,18 @@ class smrtForm extends Component {
          <input
             name="oscars" 
             type="text"
-            //className={errorMark('oscars')? "error":''}
             value={this.state.oscars} 
             onFocus={this.handleFocus}
             onChange={this.handleChange}/>
         </label>
  <br/>
-        <small className={errorMark('oscars')? "":"hidden"}>Input a number greater than or equal to 0</small>
+        <small className={errorMark('oscars')? "":"hidden"}>Please input a number greater than or equal to 0</small>
        <br/>
         <label>
-   Degrees from Kevin Bacon?<br/>         
+   Degrees from Kevin Bacon<br/>         
      <input
             name="degrees" 
             type="text"
-            //className={errorMark('oscars')? "error":''}
             value={this.state.degrees} 
             onFocus={this.handleFocus}
             onChange={this.handleChange}/>
@@ -123,20 +160,36 @@ class smrtForm extends Component {
         </label>
         
 <br/>
-<small className={errorMark('degrees')? "":"hidden"}>Enter a number between 1 and 6</small>
+<small className={errorMark('degrees')? "":"hidden"}> Please enter a number between 1 and 6</small>
         <br/>
         
          <button  
          disabled={!isEnabled}  
          type="submit" 
+         value="Submit"
+         onClick={this.handleSubmit}
           >
              Submit
              </button>
 
         </form>
       </div>
+):( <div>
+   <h1> Thank you for your submisssion </h1>
+    <h2>Actor or Actress Name:</h2>
+     <h2> {this.state.person}</h2>
+   <h2>Number of Oscars Won:</h2>
+    <h2> {this.state.oscars}</h2>
+   <h2>Degrees From Kevin Bacon: </h2>
+    <h2> {this.state.degrees}</h2>
+    <button onClick={this.newForm}>
+     Submit Another?
+    </button>
+   </div>
+ )}
+</div>
     );
   }
 }
 
-export default smrtForm;
+export default reactForm;
