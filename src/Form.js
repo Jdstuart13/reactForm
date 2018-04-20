@@ -176,12 +176,12 @@ class reactForm extends Component {
       </div>
 ):( <div>
    <h1> Thank you for your submisssion </h1>
-    <h2>Actor or Actress Name:</h2>
-     <h2> {this.state.person}</h2>
+    <h2 >Actor or Actress Name:</h2>
+     <h2 className="submitted"> {this.state.person}</h2>
    <h2>Number of Oscars Won:</h2>
-    <h2> {this.state.oscars}</h2>
+    <h2 className="submitted"> {this.state.oscars}</h2>
    <h2>Degrees From Kevin Bacon: </h2>
-    <h2> {this.state.degrees}</h2>
+    <h2 className="submitted"> {this.state.degrees}</h2>
     <button onClick={this.newForm}>
      Submit Another?
     </button>
